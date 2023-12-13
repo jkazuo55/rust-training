@@ -16,6 +16,8 @@ fn main() {
 
     // basic::ciclos::ciclos()
 
-    basic::matchs::matchs()
+    // basic::matchs::matchs()
+
+    basic::functions::try_functions()
 
 }

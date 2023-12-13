@@ -6,3 +6,4 @@ pub mod matchs;
 pub mod tuplas;
 pub mod variables;
 pub mod vectors;
+pub mod functions;

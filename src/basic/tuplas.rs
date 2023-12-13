@@ -1,3 +1,4 @@
+// agrupa distintos tipos de datos
 // alamcena diferentes tipos de datos
 
 pub fn tuplas() {
