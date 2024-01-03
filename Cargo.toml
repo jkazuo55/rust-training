@@ -1,5 +1,5 @@
 [package]
-name = "rust-training"
+name = "rust_training"
 version = "0.1.0"
 edition = "2021"
 

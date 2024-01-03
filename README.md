@@ -1,1 +1,1 @@
-# rust-training
+# rust_training
