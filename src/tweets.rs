@@ -4,6 +4,7 @@ use actix_web::web::{Data, Path};
 use chrono::{NaiveDateTime, Utc};
 use diesel::r2d2::{ConnectionManager, Pool};
 use diesel::{ExpressionMethods, Insertable, Queryable, RunQueryDsl};
+use diesel::query_dsl::methods::{FilterDsl, LimitDsl, OrderDsl};
 use uuid::Uuid;
 use diesel::PgConnection;
 use serde::{Deserialize, Serialize};
@@ -26,14 +27,26 @@ impl Tweet {
     }
 }
 
-// api/tweets
 #[get("/tweets")]
-pub async fn get_tweets() -> HttpResponse {
-    // get tweets
-    let tweets = ["tweet 1 : hola", "tweet 2 : chao"];
+pub async fn get_tweets(pool: Data<Pool<ConnectionManager<PgConnection>>>) -> HttpResponse {
+    use crate::schema::tweets::dsl::*;
+
+    let mut conn = pool
+        .get()
+        .expect(" No pude obtener conexión a la base de datos");
+    let result = tweets
+        .order(created_at.desc())
+        .limit(10) // sería bueno parametrizar este valor
+        .load::<Tweet>(&mut conn);
+
+    let response = match result {
+        Ok(tws) => tws,
+        Err(_) => vec![],
+    };
+
     HttpResponse::Ok()
         .content_type(APPLICATION_JSON)
-        .json(tweets)
+        .json(response)
 }
 
 #[post("/tweets")]
