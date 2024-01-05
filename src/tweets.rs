@@ -1,6 +1,16 @@
 use crate::constants::APPLICATION_JSON;
-use actix_web::web::Path;
+use actix_web::web::{Data, Path};
+use chrono::{NaiveDateTime, Utc};
+use diesel::r2d2::{ConnectionManager, Pool};
+use uuid::Uuid;
+use diesel::PgConnection;
 use actix_web::{ get, post, HttpResponse};
+
+struct Tweet {
+    id: Uuid,
+    created_at: NaiveDateTime,
+    message: String,
+}
 
 // api/tweets
 #[get("/tweets")]
@@ -13,7 +23,7 @@ pub async fn get_tweets() -> HttpResponse {
 }
 
 #[post("/tweets")]
-pub async fn create_tweet() -> HttpResponse {
+pub async fn create_tweet(req_body: String,pool: Data<Pool<ConnectionManager<PgConnection>>>,) -> HttpResponse {
     // get tweets
     let new_tweet = "este es mi nuevo tweet";
     HttpResponse::Created()
